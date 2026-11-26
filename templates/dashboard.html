@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LLM Request Monitor</title>
+<style>
+*{box-sizing:border-box}body{background:#eef2f7;color:#132135;font:16px system-ui,sans-serif;margin:0}main{max-width:960px;margin:8vh auto;padding:24px}h1{font-size:clamp(2rem,6vw,3rem);letter-spacing:-.05em;margin:.3em 0}p{color:#41536d}form{display:flex;align-items:center;gap:12px;margin:30px 0 20px}button,select{font:inherit;padding:8px 12px;border-radius:6px;border:1px solid #a1afc2;background:white}button{background:#173b69;color:white;cursor:pointer}section{background:white;border:1px solid #d3dae4;border-radius:14px;overflow:auto}table{width:100%;border-collapse:collapse;text-align:left;white-space:nowrap}th,td{padding:19px;border-bottom:1px solid #e2e8f0}thead{background:#f7f9fc}td{font-variant-numeric:tabular-nums}.error{color:#9c2c28;font-weight:700}a{color:#244d81}
+</style>
+<main>
+<h1>LLM Request Monitor</h1>
+<p>Compare request volume, errors, and tail latency by model.</p>
+<form method="get">
+<label for="window">Time range</label>
+<select id="window" name="window">
+{% for value in windows %}<option value="{{ value }}" {% if value == window %}selected{% endif %}>Last {{ value }}</option>{% endfor %}
+</select>
+<button>Apply</button>
+</form>
+<section aria-label="Model metrics">
+<table>
+<thead><tr><th scope="col">Model</th><th scope="col">Requests</th><th scope="col">Error rate</th><th scope="col">p95 latency</th></tr></thead>
+<tbody>
+{% for row in rows %}
+<tr><th scope="row">{{ row.model }}</th><td>{{ row.requests }}</td><td {% if row.error_rate %}class="error"{% endif %}>{{ '%.1f%%' | format(row.error_rate * 100) }}</td><td>{{ '{:,}'.format(row.p95_ms) }} ms</td></tr>
+{% else %}
+<tr><td colspan="4">No requests in this time range.</td></tr>
+{% endfor %}
+</tbody>
+</table>
+</section>
+<p><a href="/docs">API documentation</a></p>
+</main>
+</html>

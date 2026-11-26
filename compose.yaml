@@ -1,0 +1,13 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: monitor
+      POSTGRES_PASSWORD: monitor
+      POSTGRES_DB: monitor
+    ports:
+      - '127.0.0.1:5432:5432'
+    volumes:
+      - monitor-data:/var/lib/postgresql/data
+volumes:
+  monitor-data:

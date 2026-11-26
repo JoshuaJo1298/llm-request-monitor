@@ -1,0 +1,5 @@
+{"request_id":"r1","model":"model-a","latency_ms":200,"input_tokens":100,"output_tokens":40,"status":"ok"}
+{"request_id":"r2","model":"model-a","latency_ms":400,"input_tokens":120,"output_tokens":0,"status":"error"}
+{broken json
+
+{"request_id":"r3","model":"model-b","latency_ms":150,"input_tokens":80,"output_tokens":20,"status":"ok"}
