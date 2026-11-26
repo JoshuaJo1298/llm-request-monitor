@@ -2,6 +2,8 @@
 
 Inspect request volume, error rate and p95 latency by model. FastAPI serves the dashboard and the import API. PostgreSQL stores request metadata and calculates aggregates.
 
+![Dashboard showing the seeded latency incident for aurora-large.](dashboard.png)
+
 ## Run the incident demo
 
 Requires Python 3.9+ and Docker Compose, or an existing PostgreSQL database.
