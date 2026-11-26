@@ -21,3 +21,19 @@ jobs:
           python-version: '3.12'
       - run: pip install -r requirements.txt pytest httpx
       - run: python -m pytest -q
+      - name: Capture incident demo
+        env:
+          DATABASE_URL: postgresql://monitor:monitor@localhost:5432/monitor
+        run: |
+          python -m uvicorn app:app &
+          for attempt in $(seq 1 20); do
+            if curl -fsS http://127.0.0.1:8000/api/metrics; then break; fi
+            sleep 1
+          done
+          python seed.py > /tmp/incident.jsonl
+          curl -fsS --data-binary @/tmp/incident.jsonl http://127.0.0.1:8000/api/import
+          google-chrome --headless --no-sandbox --disable-dev-shm-usage --hide-scrollbars --window-size=1100,650 --screenshot=dashboard.png http://127.0.0.1:8000/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dashboard-demo
+          path: dashboard.png
